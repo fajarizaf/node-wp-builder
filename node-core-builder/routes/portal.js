@@ -65,7 +65,7 @@ const portal = app => {
     })
 
 
-    app.post('/portal/cms/install' , async (req,res) => {
+    app.post('/portal/generate/cms/' , async (req,res) => {
 
         try {
 

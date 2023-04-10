@@ -42,41 +42,6 @@ exports.install = (body) => new Promise((resolve, reject) => {
 })
 
 
-// install theme wordpress
-exports.install_theme = (body) => new Promise((resolve, reject) => {
-
-    let body = {
-        "params": [
-            "--call", 
-            "wp-toolkit", 
-            "--wp-cli", 
-            "-instance-id", "1", 
-            "--", "theme", 
-            "install", "https://downloads.wordpress.org/theme/neve.3.5.6.zip"
-        ]
-        
-    }
-    
-    axios.request({
-        method: 'POST',
-        url: process.env.PLESK_HOSTNAME+'/api/v2/cli/extension/call',
-        maxRedirects: 0,
-        responseType:'json',
-        data:JSON.stringify(body),
-        headers: headers
-    }).then(res => {
-        resolve(res.data)
-    }).catch( e => {
-        console.log(e.message)
-        reject({
-            status:'failed', 
-            response: e.message
-        })
-    })
-
-})
-
-
 // install plugin wordpress
 exports.install_plugin = () => new Promise((resolve, reject) => {
 
@@ -128,43 +93,6 @@ exports.activated_plugin = () => new Promise((resolve, reject) => {
             "astra-sites"
         ]
         
-    }
-    
-    axios.request({
-        method: 'POST',
-        url: process.env.PLESK_HOSTNAME+'/api/v2/cli/extension/call',
-        maxRedirects: 0,
-        responseType:'json',
-        data:JSON.stringify(body),
-        headers: headers
-    }).then(res => {
-        resolve(res.data)
-    }).catch( e => {
-        console.log(e.message)
-        reject({
-            status:'failed', 
-            response: e.message
-        })
-    })
-
-})
-
-
-// activate theme wordpress
-exports.activated_theme = (body) => new Promise((resolve, reject) => {
-
-    let body = {
-        "params": [
-            "--call", 
-            "wp-toolkit", 
-            "--wp-cli", 
-            "-instance-id", 
-            "1", 
-            "--", 
-            "theme", 
-            "activate", 
-            "neve"
-        ]
     }
     
     axios.request({

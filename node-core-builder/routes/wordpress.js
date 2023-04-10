@@ -25,24 +25,6 @@ const wordpress = app => {
 
     })
 
-
-    app.get('/wordpress/starter/templates' , async (req,res) => {
-
-        try {
-            
-            var data = {}
-            var execute = await WORDPRESS.starter_templates()
-            
-            res.json({status: 'success', response: execute})
-            
-        } catch(error) {
-
-            res.send({status: 'failed', response: error.message})
-
-        }
-
-    })
-
 }
 
 module.exports = wordpress
