@@ -1,4 +1,5 @@
 // middleware call
+const { verifyToken } = require('../middleware/verifyToken')
 
 // include controllers
 const DOMAIN = require("../controllers/cont-domain")

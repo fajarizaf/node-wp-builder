@@ -1,4 +1,5 @@
 // middleware call
+const { verifyToken } = require('../middleware/verifyToken')
 
 // include controllers
 const apicall = require("../controllers/call")
@@ -28,6 +29,7 @@ const customers = app => {
 
 
     app.get('/customer/list' , async (req,res) => {
+        
         try {
             
             var execute = await CUSTOMER.list()
