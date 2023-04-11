@@ -1,4 +1,5 @@
 // middleware call
+const { verifyToken } = require('../middleware/verifyToken')
 
 // include controllers
 const WORDPRESS = require("../controllers/cont-wordpress")

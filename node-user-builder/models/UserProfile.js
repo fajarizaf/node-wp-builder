@@ -26,13 +26,6 @@ module.exports = (sequelize, DataTypes) => {
             notEmpty:false
         }
     },
-    MobilePhone: {
-        type:DataTypes.STRING(50),
-        allowNull: true,
-        validate: {
-            notEmpty:false
-        }
-    },
     Email: {
         type:DataTypes.STRING(50),
         allowNull: false,

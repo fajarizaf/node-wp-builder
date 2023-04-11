@@ -1,4 +1,5 @@
 // middleware call
+const { verifyToken } = require('../middleware/verifyToken')
 
 // include controllers
 const apicall = require("../controllers/call")
@@ -9,7 +10,7 @@ const domain = app => {
 
 
     
-    app.get('/domain' , async (req,res) => {
+    app.get('/domain' , verifyToken ,  async (req,res) => {
 
         try {
             
@@ -28,7 +29,7 @@ const domain = app => {
     })
 
 
-    app.get('/domain/list' , async (req,res) => {
+    app.get('/domain/list' , verifyToken , async (req,res) => {
 
         try {
             
