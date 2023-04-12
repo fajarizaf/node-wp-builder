@@ -1,7 +1,7 @@
 {
   "local": {
     "username": "root",
-    "password": "",
+    "password": "mysql",
     "database": "node_user_builder",
     "host": "localhost",
     "dialect": "mysql",

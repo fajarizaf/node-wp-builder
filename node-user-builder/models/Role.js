@@ -29,21 +29,7 @@ module.exports = (sequelize, DataTypes) => {
     Department: {
       type:DataTypes.STRING(30),
       allowNull: false
-    },
-    CreatedBy: {
-        type:DataTypes.STRING(50),
-        allowNull: false,
-        validate: {
-          notEmpty:true
-        }
-    },
-    ModifiedBy: {
-        type:DataTypes.STRING(50),
-        allowNull: false,
-        validate: {
-        notEmpty:true
-        }
-    },
+    }
   }, {});
   Role.associate = function(models) {
     Role.hasMany(models.UserCredential,  {foreignKey: 'RoleCode', as: 'usr_role'})
