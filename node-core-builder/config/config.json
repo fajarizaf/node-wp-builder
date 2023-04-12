@@ -1,0 +1,35 @@
+{
+  "local": {
+    "username": "root",
+    "password": "",
+    "database": "node_core_builder",
+    "host": "localhost",
+    "dialect": "mysql",
+    "port": "3306",
+    "url_frond_local": "http://localhost:3007",
+    "url_frond_staging": "http://localhost:3007",
+    "url_frond_prod": "http://localhost:3007"
+  },
+  "development": {
+    "username": "root",
+    "password": "",
+    "database": "node_core_builder",
+    "host": "localhost",
+    "dialect": "mysql",
+    "port": "3306",
+    "url_frond_local": "http://localhost:3007",
+    "url_frond_staging": "http://202.145.0.38:3000",
+    "url_frond_prod": "http://localhost:3007"
+  },
+  "production": {
+      "username": "root",
+      "password": "",
+      "database": "node_core_builder",
+      "host": "localhost",
+      "dialect": "mysql",
+      "port": "3306",
+      "url_frond_local": "http://localhost:3007",
+      "url_frond_staging": "http://202.145.0.38:3000",
+      "url_frond_prod": "http://localhost:3007"
+  }
+}

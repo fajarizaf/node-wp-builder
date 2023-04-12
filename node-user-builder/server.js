@@ -105,7 +105,7 @@ const mysql = require('mysql2/promise')
     })
 
   sequelize.sync().then(function(){
-    const PORT = process.env.PORT || 3004;
+    const PORT = process.env.PORT || 3011;
     app.listen(PORT, () => {
       console.log('Server udah running sekarang')
     })

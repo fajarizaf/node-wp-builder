@@ -2,14 +2,12 @@
 const models = require('../models')
 const UserCredential = models.UserCredential
 const UserProfile = models.UserProfile
-const Company = models.Company
 const Role = models.Role
 
 
 //include lib
 var md5 = require('md5')
 var jwt = require('jsonwebtoken')
-var QRCode = require('qrcode')
 
 
 // controller login with email
@@ -24,23 +22,13 @@ exports.Login = (data) => new Promise((resolve, reject) => {
                 model: UserProfile, as: 'usr_profile', 
                 attributes : [
                     'ContactName', 
-                ],
-                include: [{
-                    model: Company, as: 'usr_company',
-                    attributes : [
-                        'CompanyCode',
-                        ['ParentID','CompanyParent']
-                    ],
-                }],
+                ]
             },
             { 
                 model: Role, as: 'usr_role',
                 required : true,
-                where: {
-                    RoleType: 'ADMIN'
-                },
                 attributes : [
-                    'RoleName','RoleType','Department'
+                    'RoleName','RoleType'
                 ],
             }
         ]
@@ -66,16 +54,14 @@ exports.Login = (data) => new Promise((resolve, reject) => {
                     const AccountType =  respond[0].AccountType
                     const RoleName    =  dataRole.RoleName
                     const RoleType    =  dataRole.RoleType
-                    const CompanyCode =  dataCompany[0].CompanyCode
-                    const Department  =  dataRole.Department
 
                     // generate access token
-                    const accessToken = jwt.sign({UserCode,UserName,UserType,RoleCode,CompanyCode,AccountType,RoleName,RoleType,UserBranch,Department}, process.env.ACCESS_TOKEN_SECRET, {
+                    const accessToken = jwt.sign({UserCode,UserName,UserType,RoleCode,AccountType,RoleName,RoleType,UserBranch}, process.env.ACCESS_TOKEN_SECRET, {
                         expiresIn: '24h'
                     })
 
                     // generate refresh token
-                    const refreshToken = jwt.sign({UserCode,UserName,UserType,RoleCode,CompanyCode,AccountType,RoleName,RoleType,UserBranch,Department}, process.env.REFRESH_TOKEN_SECRET, {
+                    const refreshToken = jwt.sign({UserCode,UserName,UserType,RoleCode,AccountType,RoleName,RoleType,UserBranch}, process.env.REFRESH_TOKEN_SECRET, {
                         expiresIn: '24h'
                     })
 
@@ -133,7 +119,7 @@ exports.Login = (data) => new Promise((resolve, reject) => {
         resolve(
             convertToJson({
                 respond: {
-                    status: 'errorn',
+                    status: 'error',
                     response: e.message
                 }
             })
@@ -158,14 +144,7 @@ exports.rtoken = (data, refreshToken) => new Promise((resolve, reject) => {
                 model: UserProfile, as: 'usr_profile', 
                 attributes : [
                     'ContactName', 
-                ],
-                include: [{
-                    model: Company, as: 'usr_company',
-                    attributes : [
-                        'CompanyCode',
-                        ['ParentID','CompanyParent']
-                    ],
-                }],
+                ]
             },
             { 
                 model: Role, as: 'usr_role',

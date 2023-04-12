@@ -1,6 +1,10 @@
 // include controllers
 const jwt = require('jsonwebtoken')
 
+// include controllers
+const SERVER = require("../controllers/cont-server")
+const CONFIG = require("../controllers/cont-config")
+
 exports.verifyToken = async (req,res,next) => {
     try {
 
@@ -11,17 +15,30 @@ exports.verifyToken = async (req,res,next) => {
                 response: "Authorization access token null"
             }})
         } else {
+
             jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, decoded) => {
                 if(err) {
                     res.json({respond : {status:"forbidden", response: "Token not verified"}})
                 } else {
 
+                    // get active hosting
+                    var hosting = await SERVER.get_available_hosting()
+
                     req.sessionLogin = token
-                        
+    
                     req.UserCode = decoded.UserCode
                     req.UserName = decoded.UserName
                     req.RoleCode = decoded.RoleCode
                     req.RoleName = decoded.RoleName
+
+                    req.plesk_username = hosting.respond.data.plesk_username
+                    req.plesk_password = hosting.respond.data.plesk_password
+                    req.server_ip = hosting.respond.data.ip_address
+                    req.server_host = hosting.respond.data.host_name
+
+                    req.base_domain_id = await CONFIG.get_config_name('base_domain_id')
+                    req.base_domain_name = await CONFIG.get_config_name('base_domain_name')
+                    req.base_domain_guid = await CONFIG.get_config_name('base_domain_guid')
                     
                     const request = req.body
                     if(request.hasOwnProperty('filter')) {
@@ -29,12 +46,8 @@ exports.verifyToken = async (req,res,next) => {
                     } else {
                         req.where = {}
                     }
-                        
-                    if(decoded.RoleType == 'CUSTOMER') {
-                        next()
-                    } else {
-                        res.json({respond : {status:'forbidden', response: 'Admin User not Authorization access'}})
-                    }
+
+                    next()
 
                 }
             })

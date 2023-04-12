@@ -10,50 +10,14 @@ const CLI  = require("../controllers/cont-cli")
 
 //include lib
 
-const portal = app => {
+const portal = app => { 
 
-    app.post('/portal/generate/subdomain' , async (req,res) => {
+
+    app.post('/portal/generate/subdomain' , verifyToken , async (req,res) => {
 
         try {
-
-            let domainData = {
-                "name": "tes.nodebuilder.my.id",
-                "description": "My website",
-                "hosting_type": "virtual",
-                "hosting_settings": {
-                  "ftp_login": "test_login",
-                  "ftp_password": "Adayanghilang123@"
-                },
-                "base_domain": {
-                  "id": 9,
-                  "name": "nodebuilder.my.id",
-                  "guid": "f94df526-1cbb-44a5-b3a6-0f45d5063f62"
-                },
-                "parent_domain": {
-                  "id": 9,
-                  "name": "nodebuilder.my.id",
-                  "guid": "f94df526-1cbb-44a5-b3a6-0f45d5063f62"
-                },
-                "owner_client": {
-                  "id": 5,
-                  "login": "runi",
-                  "guid": "ffa37855-1133-47c8-877f-d6ac45e0d348",
-                  "external_id": 5
-                },
-                "ip_addresses": [
-                  "93.184.216.34",
-                  "2606:2800:220:1:248:1893:25c8:1946"
-                ],
-                "ipv4": [
-                  "103.59.94.53"
-                ],
-                "plan": {
-                  "name": "Unlimited"
-                }
-            }
-
-            var nDomain = await DOMAIN.create(domainData)
-            var nCMS = await CLI.install_wordpress()
+            
+            var nDomain = await DOMAIN.create_subdomain(req)
             
             res.json({status: 'success', response: nDomain})
             
@@ -137,21 +101,21 @@ const portal = app => {
     })
 
 
-app.post('/portal/plugin/install' , async (req,res) => {
+    app.post('/portal/plugin/install' , async (req,res) => {
 
-  try {
+      try {
 
-      var nTheme = await WORDPRESS.install_plugin()
-      
-      res.json({status: 'success', response: nTheme})
-      
-  } catch(error) {
+          var nTheme = await WORDPRESS.install_plugin()
+          
+          res.json({status: 'success', response: nTheme})
+          
+      } catch(error) {
 
-      res.send({status: 'failed', response: error})
+          res.send({status: 'failed', response: error})
 
-  }
+      }
 
-})
+    })
     
 
 }
