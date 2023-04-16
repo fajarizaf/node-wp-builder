@@ -3,10 +3,7 @@ const { verifyToken } = require('../middleware/verifyToken')
 
 // include controllers
 const DOMAIN = require("../controllers/cont-domain")
-const CUSTOMER = require("../controllers/cont-customer")
-const SERVER = require("../controllers/cont-server")
 const WORDPRESS  = require("../controllers/cont-wordpress")
-const CLI  = require("../controllers/cont-cli")
 
 //include lib
 
@@ -30,11 +27,55 @@ const portal = app => {
     })
 
 
-    app.post('/portal/generate/cms/' , async (req,res) => {
+    app.post('/portal/generate/cms/' , verifyToken , async (req,res) => {
 
         try {
 
-            var nCMS = await WORDPRESS.install()
+            var site = await DOMAIN.get_site(req.body.site_id)
+
+            if(site.respond.status == 'success') {
+
+              var nCMS = await WORDPRESS.install(req, site.respond.data.domain_name)
+
+              res.json(nCMS)
+              
+            } else {
+
+              res.json(site)
+
+            } 
+            
+        } catch(error) {
+
+            res.send({status: 'failed', response: error})
+
+        }
+
+    })
+
+
+    app.post('/portal/generate/cms/progress' , verifyToken , async (req,res) => {
+
+      try {
+
+          var nCMS = await WORDPRESS.progress_install(req)
+          
+          res.json({status: 'success', response: nCMS})
+          
+      } catch(error) {
+
+          res.send({status: 'failed', response: error})
+
+      }
+
+  })
+
+
+    app.post('/portal/generate/ssl' , verifyToken , async (req,res) => {
+
+        try {
+
+            var nCMS = await DOMAIN.install_ssl_lets_encrypt(req , req.body.domain_name)
             
             res.json({status: 'success', response: nCMS})
             
@@ -47,31 +88,12 @@ const portal = app => {
     })
 
 
-    app.post('/portal/generate/ssl' , async (req,res) => {
+    app.post('/portal/generate/theme/' , verifyToken , async (req,res) => {
 
         try {
-
-            var nCMS = await CLI.install_ssl_lets_encrypt()
-            
-            res.json({status: 'success', response: nCMS})
-            
-        } catch(error) {
-
-            res.send({status: 'failed', response: error})
-
-        }
-
-    })
-
-
-    app.post('/portal/generate/theme/' , async (req,res) => {
-
-        try {
-            
-            var data = {}
 
             // generate starter template
-            var execute = await WORDPRESS.starter_templates()
+            var execute = await WORDPRESS.starter_templates(req)
             
             res.json({status: 'success', response: execute})
             
@@ -83,14 +105,30 @@ const portal = app => {
 
     })
 
-
-    app.post('/portal/plugin/activate' , async (req,res) => {
+    app.post('/portal/theme/install' , verifyToken , async (req,res) => {
 
       try {
 
-          var nTheme = await WORDPRESS.activated_plugin()
+          // generate starter template
+          var execute = await WORDPRESS.install_theme(req)
           
-          res.json({status: 'success', response: nTheme})
+          res.json({status: 'success', response: execute})
+          
+      } catch(error) {
+
+          res.send({status: 'failed', response: error})
+
+      }
+
+  })
+
+    app.post('/portal/plugin/install' , verifyToken , async (req,res) => {
+
+      try {
+
+          var execute = await WORDPRESS.install_plugin(req)
+          
+          res.json({status: 'success', response: execute})
           
       } catch(error) {
 
@@ -101,13 +139,13 @@ const portal = app => {
     })
 
 
-    app.post('/portal/plugin/install' , async (req,res) => {
+    app.post('/portal/plugin/activate' , verifyToken , async (req,res) => {
 
       try {
 
-          var nTheme = await WORDPRESS.install_plugin()
+          var execute = await WORDPRESS.activated_plugin(req)
           
-          res.json({status: 'success', response: nTheme})
+          res.json({status: 'success', response: execute})
           
       } catch(error) {
 
@@ -116,6 +154,9 @@ const portal = app => {
       }
 
     })
+
+
+    
     
 
 }

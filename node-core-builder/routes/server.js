@@ -2,33 +2,17 @@
 const { verifyToken } = require('../middleware/verifyToken')
 
 // include controllers
-const WORDPRESS = require("../controllers/cont-wordpress")
+const apicall = require("../controllers/call")
 
 //include lib
 
-const wordpress = app => {
+const server = app => {
 
-
-    app.get('/wordpress' , verifyToken , async (req,res) => {
-
-        try {
-            var execute = await WORDPRESS.get(req)
-            
-            res.json({status: 'success', response: execute})
-            
-        } catch(error) {
-
-            res.send({status: 'failed', response: error})
-
-        }
-
-    })
-
-
-    app.get('/wordpress/list' , verifyToken , async (req,res) => {
+    app.get('/server' , verifyToken , async (req,res) => {
 
         try {
-            var execute = await WORDPRESS.list(req)
+
+            var execute = await apicall.service('GET', req.server_host+'/api/v2/server', req)
             
             res.json({status: 'success', response: execute})
             
@@ -40,6 +24,23 @@ const wordpress = app => {
 
     })
 
+
+    app.get('/server/ips' , verifyToken , async (req,res) => {
+
+        try {
+
+            var execute = await apicall.service('GET', req.server_host+'/api/v2/server/ips', req)
+            
+            res.json({status: 'success', response: execute})
+            
+        } catch(error) {
+
+            res.send({status: 'failed', response: error.message})
+
+        }
+
+    })
+    
 }
 
-module.exports = wordpress
+module.exports = server

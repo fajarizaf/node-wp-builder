@@ -12,8 +12,10 @@ app.use(bodyParser.json())
 app.use(cookieParser())
 app.set("trust proxy", true)
 
+require('./routes/server')(app)
 require('./routes/portal')(app)
 require('./routes/domain')(app)
+require('./routes/site')(app)
 require('./routes/customer')(app)
 require('./routes/wordpress')(app)
     

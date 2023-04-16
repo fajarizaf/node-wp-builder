@@ -169,6 +169,21 @@ const auth = app => {
 
     })
 
+
+    // get password
+    app.get('/auth/get/pass', verifyToken ,  async (req,res) => {
+
+        try {
+            
+            const password = await user.getPassword(req.query.UserCode)
+            res.send(password)
+
+        } catch (error) {
+            res.json(error)
+        }
+
+    })
+
 }
 
 module.exports = auth

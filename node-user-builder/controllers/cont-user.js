@@ -610,6 +610,39 @@ exports.Generate_UserCode = () => new Promise((resolve, reject) => {
 })
 
 
+exports.getPassword = (UserCode) => new Promise((resolve, reject) => {
+    UserCredential.findOne({
+        where: {
+            UserCode: UserCode
+        }
+    })
+    .then((respond) => {
+        if(respond != null) {
+            resolve(respond.PasswordLogin)
+        } else {
+            resolve(
+                convertToJson({
+                    respond: {
+                        status: 'failed',
+                        response: 'Kode Validasi perubahan password telah expired, silahkan request reset password kembali'
+                    } 
+                })
+            )
+        }
+    })
+    .catch((e) => {
+        resolve(
+            convertToJson({
+                respond: {
+                    status: 'error',
+                    response: e.message
+                }
+            })
+        )
+    })
+})
+
+
 exports.GetCountryPrimaryAccount = (usercode) => {
     return UserProfile.findOne({
         where: {

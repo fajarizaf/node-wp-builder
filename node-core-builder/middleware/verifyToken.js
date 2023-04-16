@@ -34,11 +34,19 @@ exports.verifyToken = async (req,res,next) => {
                     req.plesk_username = hosting.respond.data.plesk_username
                     req.plesk_password = hosting.respond.data.plesk_password
                     req.server_ip = hosting.respond.data.ip_address
+                    req.server_ipv4 = hosting.respond.data.ipv4
+                    req.server_ipv6 = hosting.respond.data.ipv6
                     req.server_host = hosting.respond.data.host_name
 
                     req.base_domain_id = await CONFIG.get_config_name('base_domain_id')
                     req.base_domain_name = await CONFIG.get_config_name('base_domain_name')
                     req.base_domain_guid = await CONFIG.get_config_name('base_domain_guid')
+
+                    req.owner_email = await CONFIG.get_config_name('owner_email')
+                    req.owner_id = await CONFIG.get_config_name('owner_id')
+                    req.owner_login = await CONFIG.get_config_name('owner_login')
+                    req.owner_pass = await CONFIG.get_config_name('owner_pass')
+                    req.owner_guid = await CONFIG.get_config_name('owner_guid')
                     
                     const request = req.body
                     if(request.hasOwnProperty('filter')) {
